@@ -1,0 +1,12 @@
+apiVersion: proxy.k8s.kemo.dev/v1alpha1
+kind: ProxyConfig
+metadata:
+  labels:
+    app.kubernetes.io/name: proxyconfig
+    app.kubernetes.io/instance: proxyconfig-sample
+    app.kubernetes.io/part-of: proxy-config-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: proxy-config-operator
+  name: proxyconfig-sample
+spec:
+  # TODO(user): Add fields here

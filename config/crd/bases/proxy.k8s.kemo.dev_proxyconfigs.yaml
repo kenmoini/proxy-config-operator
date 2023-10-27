@@ -1,0 +1,90 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.1
+  creationTimestamp: null
+  name: proxyconfigs.proxy.k8s.kemo.dev
+spec:
+  group: proxy.k8s.kemo.dev
+  names:
+    kind: ProxyConfig
+    listKind: ProxyConfigList
+    plural: proxyconfigs
+    singular: proxyconfig
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ProxyConfig is the Schema for the proxyconfigs API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ProxyConfigSpec defines the desired state of ProxyConfig
+            properties:
+              injectCACert:
+                description: InjectCACert defines whether to inject the CA certificate
+                  into the workloads. When proxySource is set to "openshift", it will
+                  use the cluster-wide additionalTrustBundle defined in the proxy.config.openshift.io/cluster
+                  resource and provided by the Cluster Network Operator. When proxySource
+                  is set to "custom", it will use the CA certificate defined in the
+                  ProxyConfig resource.
+                type: boolean
+              proxy:
+                description: Proxy defines the proxy configuration to use when ProxySource
+                  is set to "custom"
+                properties:
+                  caConfig:
+                    description: CACert defines the CA certificate stored in a ConfigMap
+                      to use
+                    properties:
+                      key:
+                        description: Key defines the key of the CA certificate stored
+                          in a ConfigMap to use
+                        type: string
+                      name:
+                        description: Name defines the CA certificate stored in a ConfigMap
+                          to use
+                        type: string
+                    type: object
+                  httpProxy:
+                    description: HTTPProxy defines the HTTP proxy to use
+                    type: string
+                  httpsProxy:
+                    description: HTTPSProxy defines the HTTPS proxy to use
+                    type: string
+                  noProxy:
+                    description: NoProxy defines the no proxy configuration to use
+                    type: string
+                type: object
+              proxySource:
+                description: 'ProxySource defines the source of the proxy configuration
+                  Options include: - "openshift" (default): Use the proxy configuration
+                  from the OpenShift cluster - "custom": Use the proxy configuration
+                  defined in the ProxyConfig resource'
+                enum:
+                - openshift
+                - custom
+                type: string
+            type: object
+          status:
+            description: ProxyConfigStatus defines the observed state of ProxyConfig
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
